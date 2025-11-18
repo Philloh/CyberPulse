@@ -1,0 +1,517 @@
+{
+  "adventures": [
+    {
+      "id": "1",
+      "title": "Nairobi Nightfall: CEO Spoof",
+      "difficulty": "Easy",
+      "description": "Minutes before payroll, a neon spear-phish tries to hijack the CFO's M-Pesa float.",
+      "scenario": "It's 8:57 PM overlooking Nairobi's CBD. A subject line screams \"URGENT: MPESA FLOAT TOP-UP\" from ceo@cyberpulse.c0m. The cadence is off, the signature lacks the usual Swahili motto, and the sender insists the finance bot is down. One wrong move and hundreds of payouts stall.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Recon",
+          "text": "The email wants you to approve emergency funds before bots auto-freeze disbursements.",
+          "choices": [
+            { "text": "Inspect full headers, SPF, and DMARC before touching anything", "nextNode": "headers", "points": 40 },
+            { "text": "Forward to finance and click the embedded \"Authorize\" link", "nextNode": "rush_payment", "points": 0 },
+            { "text": "Call the CEO on Signal using a stored contact", "nextNode": "call_ceo", "points": 60 }
+          ]
+        },
+        "headers": {
+          "level": "Level 2 - Signal Check",
+          "text": "SPF fails, the reply-to is a random Gmail, and the domain uses a zero instead of an o.",
+          "choices": [
+            { "text": "Spin up an incident bridge, freeze payouts, and share indicators", "nextNode": "incident_room", "points": 40 },
+            { "text": "Reply-all with a warning and hope someone in IT blocks it quickly", "nextNode": "panic_reply", "points": 20 }
+          ]
+        },
+        "call_ceo": {
+          "level": "Level 2 - Human Validation",
+          "text": "The CEO answers groggily and confirms she never sent the email. She wants a containment plan in five minutes.",
+          "choices": [
+            { "text": "Alert SOC, send screenshots, and move payouts to manual approval", "nextNode": "containment", "points": 40 },
+            { "text": "Assume the warning is enough and return to prepping payroll", "nextNode": "false_calm", "points": 10 }
+          ]
+        },
+        "incident_room": {
+          "level": "Level 3 - Containment",
+          "text": "SOC blocks the lookalike domain, issues mobile alerts, and praises the fast escalation.",
+          "outcome": "SUCCESS",
+          "lesson": "Verifying signals and launching a coordinated response keeps fraudsters from draining payment floats.",
+          "relatedArticle": "Understanding Phishing and Social Engineering",
+          "finalScore": 100
+        },
+        "panic_reply": {
+          "level": "Level 3 - Chaos",
+          "text": "Half the company sees your warning but finance never freezes payouts. Two approvals slip through before SOC intervenes.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Awareness helps, but without decisive containment attackers still win precious minutes.",
+          "relatedArticle": "Incident Response Communication Plans",
+          "finalScore": 60
+        },
+        "rush_payment": {
+          "level": "Level 3 - Breach",
+          "text": "The link harvests credentials, the attacker reroutes funds, and auditors flag you as the origin.",
+          "outcome": "FAILURE",
+          "lesson": "Urgency is the spear-phisher's favorite weapon. Independent verification beats any shiny CTA.",
+          "relatedArticle": "Business Email Compromise Playbooks",
+          "finalScore": 0
+        },
+        "containment": {
+          "level": "Level 3 - Counterstrike",
+          "text": "You feed indicators to SOC, finance halts payouts, and marketing drafts a transparency update.",
+          "outcome": "SUCCESS",
+          "lesson": "Trusted-channel verification plus swift escalation is the fastest way to defuse high-stakes spoofs.",
+          "relatedArticle": "Understanding Phishing and Social Engineering",
+          "finalScore": 95
+        },
+        "false_calm": {
+          "level": "Level 3 - Missed Opportunity",
+          "text": "Without formal escalation, the attacker tries other executives overnight. SOC only hears about it the next day.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Knowing it's fake isn't enough—document and broadcast the threat so others aren't blindsided.",
+          "relatedArticle": "Security Operations Handoff Tips",
+          "finalScore": 50
+        }
+      }
+    },
+    {
+      "id": "2",
+      "title": "Kilimani Breach Beacon",
+      "difficulty": "Medium",
+      "description": "A dusty reused password from campus days resurfaces on a darknet feed mid-demo prep.",
+      "scenario": "Your password manager pings during a SOC hackathon: a 2018 gaming forum login matches the pattern you still use for dashboard shortcuts. The same combo just hit a Telegram leak channel frequented by Kenyan threat crews. A board demo starts in 30 minutes.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Discovery",
+          "text": "The breach alert shows the exact stem you still reuse. Attackers love credential stuffing.",
+          "choices": [
+            { "text": "Launch a full password reset wave with unique passphrases", "nextNode": "reset_wave", "points": 40 },
+            { "text": "Only change the old forum password—you'll revisit the rest later", "nextNode": "token_loop", "points": 10 },
+            { "text": "Ignore it, the account was ancient anyway", "nextNode": "credential_stuffing", "points": 0 }
+          ]
+        },
+        "reset_wave": {
+          "level": "Level 2 - Containment",
+          "text": "You blitz through priority accounts, but MFA still lags on a few shared dashboards.",
+          "choices": [
+            { "text": "Enable MFA everywhere, notify SOC, and brief the board that you're 5 minutes late", "nextNode": "full_response", "points": 60 },
+            { "text": "Skip the notification to avoid spooking leadership", "nextNode": "quiet_patch", "points": 20 }
+          ]
+        },
+        "token_loop": {
+          "level": "Level 2 - Half Measures",
+          "text": "The obvious password is fixed, but clones still live inside automation scripts.",
+          "choices": [
+            { "text": "Pause prep, enable MFA, and open an incident ticket", "nextNode": "full_response", "points": 50 },
+            { "text": "Wait until after the board demo to avoid delays", "nextNode": "quiet_patch", "points": 10 }
+          ]
+        },
+        "credential_stuffing": {
+          "level": "Level 3 - Fallout",
+          "text": "Attackers reuse the combo to break into your inbox, pivot into billing portals, and leak invoices.",
+          "outcome": "FAILURE",
+          "lesson": "Every exposed password matters. Delays give credential-stuffing crews time to weaponize your identity.",
+          "relatedArticle": "Password Security and Data Breach Response",
+          "finalScore": 0
+        },
+        "full_response": {
+          "level": "Level 3 - Victory Lap",
+          "text": "MFA is everywhere, SOC confirms no suspicious logins, and the board loves the transparency.",
+          "outcome": "SUCCESS",
+          "lesson": "Comprehensive resets plus proactive comms turn potential incidents into trust-building stories.",
+          "relatedArticle": "Password Security and Two-Factor Authentication",
+          "finalScore": 100
+        },
+        "quiet_patch": {
+          "level": "Level 3 - Quiet Fix",
+          "text": "You dodge awkward conversations, but hours later a botnet replays the leaked password against a staging cluster.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Silent fixes reduce embarrassment but invite repeat attacks. Share intel before attackers do.",
+          "relatedArticle": "Security Communication Playbooks",
+          "finalScore": 55
+        }
+      }
+    },
+    {
+      "id": "3",
+      "title": "Parking-Lot Payload",
+      "difficulty": "Easy",
+      "description": "A glittery USB labeled \"Safari Winners\" appears beside your matatu slot. Tempting?",
+      "scenario": "After a late-night meetup in Westlands you spot a chrome USB with a handwritten note promising travel vouchers. Last time this happened it was a red-team drill. This time you're not sure.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Temptation",
+          "text": "The USB is warm, suggesting recent use. A crowd is forming near the parking pay station.",
+          "choices": [
+            { "text": "Pocket it and plug into your personal laptop to peek", "nextNode": "curiosity_trap", "points": 0 },
+            { "text": "Seal it in an evidence bag and walk to the SOC lab", "nextNode": "lab_drop", "points": 50 },
+            { "text": "Leave it untouched, snap a photo, and tell building security", "nextNode": "note_drop", "points": 30 }
+          ]
+        },
+        "lab_drop": {
+          "level": "Level 2 - Forensics",
+          "text": "SOC thanks you but asks whether you captured metadata or location details.",
+          "choices": [
+            { "text": "Share timestamps, photos, and let them sandbox it", "nextNode": "analysis_room", "points": 50 },
+            { "text": "Drop it anonymously and hurry home", "nextNode": "missing_context", "points": 10 }
+          ]
+        },
+        "curiosity_trap": {
+          "level": "Level 2 - Self-Inflicted Breach",
+          "text": "Auto-run launches, ransomware encrypts your photos, and the worm laterals via saved VPN creds.",
+          "outcome": "FAILURE",
+          "lesson": "Unknown media is attacker gold. Curiosity turns you into patient zero.",
+          "relatedArticle": "Physical Security and USB-Based Threats",
+          "finalScore": 0
+        },
+        "note_drop": {
+          "level": "Level 2 - Minimal Effort",
+          "text": "Security collects the drive, but without context SOC can't map the risk radius.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Not touching the device helps, but details boost threat hunting speed.",
+          "relatedArticle": "Physical Security and Device Handling",
+          "finalScore": 60
+        },
+        "analysis_room": {
+          "level": "Level 3 - Hero Moment",
+          "text": "The drive is a red-team probe. Your evidence trail lets SOC brief leadership within minutes.",
+          "outcome": "SUCCESS",
+          "lesson": "Chain-of-custody and context transform a suspicious object into actionable intelligence.",
+          "relatedArticle": "Physical Security and USB-Based Threats",
+          "finalScore": 100
+        },
+        "missing_context": {
+          "level": "Level 3 - Unfinished",
+          "text": "SOC analyzes the drive but spends hours retracing your steps to assess exposure.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Even good instincts need documentation. Details accelerate containment.",
+          "relatedArticle": "Security Investigation Essentials",
+          "finalScore": 55
+        }
+      }
+    },
+    {
+      "id": "4",
+      "title": "Ngong Road WiFi Gauntlet",
+      "difficulty": "Medium",
+      "description": "Only options: sketchy café Wi-Fi or a throttled hotspot while a VIP client waits.",
+      "scenario": "You're camped at a Nairobi coffee shop when legal pings: upload a sensitive land-registry packet within 10 minutes or the deal collapses. \"CafeFree_5G\" is blazing fast but infamous for rogue APs. Your phone hotspot is safer but crawling on one bar.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Pressure",
+          "text": "The client is watching the shared drive. Every minute counts.",
+          "choices": [
+            { "text": "Use the free Wi-Fi and trust HTTPS", "nextNode": "cafe_wifi", "points": 0 },
+            { "text": "Switch to hotspot, throttle expectations, and prep VPN", "nextNode": "hotspot_plan", "points": 40 },
+            { "text": "Delay the upload until you reach a secure office", "nextNode": "delay_trip", "points": 30 }
+          ]
+        },
+        "cafe_wifi": {
+          "level": "Level 2 - Compromise",
+          "text": "A man-in-the-middle strips HTTPS, steals session cookies, and the client portal locks your account.",
+          "outcome": "FAILURE",
+          "lesson": "Throughput is meaningless if the channel is hostile.",
+          "relatedArticle": "Public WiFi Security and Secure Remote Work",
+          "finalScore": 0
+        },
+        "hotspot_plan": {
+          "level": "Level 2 - Secure Setup",
+          "text": "Your hotspot holds but the VPN keeps dropping frames.",
+          "choices": [
+            { "text": "Retry with split tunneling and prioritize upload traffic", "nextNode": "vpn_tunnel", "points": 40 },
+            { "text": "Disable the VPN to gain speed", "nextNode": "forget_vpn", "points": 10 }
+          ]
+        },
+        "delay_trip": {
+          "level": "Level 2 - Strategic Pause",
+          "text": "Legal warns the deadline is strict but prefers safe handling over breach headlines.",
+          "choices": [
+            { "text": "Negotiate a 15-minute extension while you move to a trusted network", "nextNode": "vpn_tunnel", "points": 40 },
+            { "text": "Drive back home without updating anyone", "nextNode": "delay_more", "points": 10 }
+          ]
+        },
+        "vpn_tunnel": {
+          "level": "Level 3 - Secure Delivery",
+          "text": "The upload finishes with seconds to spare. Logs show encrypted traffic only.",
+          "outcome": "SUCCESS",
+          "lesson": "Controlled channels plus honest comms beat risky shortcuts.",
+          "relatedArticle": "Remote Work VPN Best Practices",
+          "finalScore": 100
+        },
+        "forget_vpn": {
+          "level": "Level 3 - Faster, Not Safer",
+          "text": "The upload succeeds, but compliance flags the unsecured transfer and demands a postmortem.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Speed without safeguards invites audits and sleepless nights.",
+          "relatedArticle": "Data Transfer Governance",
+          "finalScore": 60
+        },
+        "delay_more": {
+          "level": "Level 3 - Missed Window",
+          "text": "You arrive at the office to find the client moved on. At least the data stayed safe.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "If you must delay, communicate and offer safe alternatives.",
+          "relatedArticle": "Crisis Communication for Engineers",
+          "finalScore": 70
+        }
+      }
+    },
+    {
+      "id": "5",
+      "title": "Shadow Access at the Data Bunker",
+      "difficulty": "Hard",
+      "description": "A friendly engineer wants VIP access to the customer vault before sunrise—no ticket, no trail.",
+      "scenario": "Your Signal buzzes at 5 AM: \"Boss signed off, just slot me into the customer DB group so I can demo to investors.\" Change-control is frozen during migration, and granting access manually leaves zero audit trail.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Suspicion",
+          "text": "The requester insists everyone does it this way during crunch time.",
+          "choices": [
+            { "text": "Grant access immediately to keep the peace", "nextNode": "instant_leak", "points": 0 },
+            { "text": "Ping the manager and confirm there's written approval", "nextNode": "verify_ticket", "points": 30 },
+            { "text": "Guide them through the emergency ticket flow yourself", "nextNode": "help_file_ticket", "points": 40 }
+          ]
+        },
+        "verify_ticket": {
+          "level": "Level 2 - Due Diligence",
+          "text": "The manager approves the need but wants logging and time limits.",
+          "choices": [
+            { "text": "Launch an emergency change bridge with SOC on the line", "nextNode": "launch_bridge", "points": 40 },
+            { "text": "Document the chat and plan to update logs later", "nextNode": "doc_only", "points": 20 }
+          ]
+        },
+        "help_file_ticket": {
+          "level": "Level 2 - Guard Rails",
+          "text": "You co-write the ticket, but the engineer begs for immediate access while waiting.",
+          "choices": [
+            { "text": "Escalate to IT to grant time-boxed access with monitoring", "nextNode": "timeboxed_access", "points": 40 },
+            { "text": "Share a temporary admin password so they can start sooner", "nextNode": "slow_queue", "points": 10 }
+          ]
+        },
+        "instant_leak": {
+          "level": "Level 3 - Incident",
+          "text": "The account was already compromised. Customer data is siphoned before sunrise.",
+          "outcome": "FAILURE",
+          "lesson": "Shortcuts are perfect cover for social engineering.",
+          "relatedArticle": "Insider Threats and Access Control",
+          "finalScore": 0
+        },
+        "launch_bridge": {
+          "level": "Level 3 - Controlled Access",
+          "text": "IT grants least-privilege access, SOC monitors queries, and logs prove compliance.",
+          "outcome": "SUCCESS",
+          "lesson": "Even at 5 AM, process protects both the org and the relationship.",
+          "relatedArticle": "Access Control and Audit Trail Requirements",
+          "finalScore": 100
+        },
+        "doc_only": {
+          "level": "Level 3 - Audit Gap",
+          "text": "You keep screenshots, but regulators later ask why SOC wasn't looped in.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Documentation matters, but so does real-time oversight.",
+          "relatedArticle": "Change Management in High-Stakes Systems",
+          "finalScore": 70
+        },
+        "timeboxed_access": {
+          "level": "Level 3 - Heroic Assist",
+          "text": "The demo succeeds, logs show every query, and leadership applauds the guard rails.",
+          "outcome": "SUCCESS",
+          "lesson": "Helping teammates is great when you keep the controls locked.",
+          "relatedArticle": "Privilege Delegation Patterns",
+          "finalScore": 95
+        },
+        "slow_queue": {
+          "level": "Level 3 - Risky Favor",
+          "text": "The temp password leaks in a screenshot and harvesters hit the account within hours.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Even temporary creds expand the blast radius.",
+          "relatedArticle": "Secure Credential Sharing Alternatives",
+          "finalScore": 60
+        }
+      }
+    },
+    {
+      "id": "6",
+      "title": "Boardroom Cliffhanger",
+      "difficulty": "Easy",
+      "description": "An unlocked laptop beams payroll secrets onto a giant screen after midnight.",
+      "scenario": "You're packing up from a midnight blue-team drill when a conference room door creaks. Inside: a laptop still logged in, projecting payroll CSVs. Cleaners are roaming the floor.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Discovery",
+          "text": "Highly sensitive salary data is visible from the hallway.",
+          "choices": [
+            { "text": "Skim the spreadsheet to understand impact", "nextNode": "snoop", "points": 0 },
+            { "text": "Lock the workstation and document everything", "nextNode": "lock_report", "points": 40 },
+            { "text": "Shut the door and plan to mention it tomorrow", "nextNode": "postpone", "points": 10 }
+          ]
+        },
+        "snoop": {
+          "level": "Level 2 - Policy Violation",
+          "text": "Security cameras show you scrolling through staff salaries. HR opens an investigation.",
+          "outcome": "FAILURE",
+          "lesson": "Reading data you shouldn't see is still a breach.",
+          "relatedArticle": "Data Protection and Privacy Compliance",
+          "finalScore": 0
+        },
+        "lock_report": {
+          "level": "Level 2 - Immediate Action",
+          "text": "You lock the device, snap photos, and note the room number.",
+          "choices": [
+            { "text": "Call the SOC hotline and hand over evidence", "nextNode": "soc_call", "points": 60 },
+            { "text": "Leave a sticky note for the owner and head home", "nextNode": "note_only", "points": 20 }
+          ]
+        },
+        "postpone": {
+          "level": "Level 2 - Delay",
+          "text": "Hours pass before anyone notices. Cleaners could have photographed everything.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Delay equals exposure. Time matters even after midnight.",
+          "relatedArticle": "Physical Security and Device Handling",
+          "finalScore": 40
+        },
+        "soc_call": {
+          "level": "Level 3 - Exemplary Response",
+          "text": "SOC locks the account remotely, reviews logs, and sends a coaching note to the owner.",
+          "outcome": "SUCCESS",
+          "lesson": "Secure, document, escalate. In that order.",
+          "relatedArticle": "Physical Security and Device Handling",
+          "finalScore": 100
+        },
+        "note_only": {
+          "level": "Level 3 - Missed Audit",
+          "text": "The owner appreciates the reminder, but there's no record for compliance.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Friendly notes can't replace formal reporting.",
+          "relatedArticle": "Incident Reporting Essentials",
+          "finalScore": 55
+        }
+      }
+    },
+    {
+      "id": "7",
+      "title": "Wellness Week Wiretap",
+      "difficulty": "Medium",
+      "description": "A fake HR wellness drive wants your bank PIN, TIN, and favorite smoothie recipe.",
+      "scenario": "Monday morning, an email blasts the company: \"Mandatory Wellness Week check-in—complete now for free gym credits.\" The link jumps to an external site asking for passwords and mobile money details. HR normally uses the intranet.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Suspicion",
+          "text": "The countdown timer ticks down from 10 minutes.",
+          "choices": [
+            { "text": "Fill the form quickly—free perks are rare", "nextNode": "full_compromise", "points": 0 },
+            { "text": "Call HR on their published extension", "nextNode": "call_hr", "points": 40 },
+            { "text": "Drop a question in the general Slack channel first", "nextNode": "ask_chat", "points": 20 }
+          ]
+        },
+        "full_compromise": {
+          "level": "Level 2 - Credential Theft",
+          "text": "Attackers capture your login, bank details, and pivot into payroll systems.",
+          "outcome": "FAILURE",
+          "lesson": "Legit HR never asks for passwords. Scarcity is bait.",
+          "relatedArticle": "Advanced Phishing Techniques and Red Flags",
+          "finalScore": 0
+        },
+        "call_hr": {
+          "level": "Level 2 - Verification",
+          "text": "HR confirms it's fake and begs you to send the headers.",
+          "choices": [
+            { "text": "Forward headers, screenshots, and phone details to SOC", "nextNode": "intel_dump", "points": 60 },
+            { "text": "Just tell your team lead; they'll handle it later", "nextNode": "slow_alert", "points": 20 }
+          ]
+        },
+        "ask_chat": {
+          "level": "Level 2 - Crowdsource",
+          "text": "Colleagues are confused. Some already filled it out.",
+          "choices": [
+            { "text": "Immediately escalate with HR and SOC", "nextNode": "intel_dump", "points": 40 },
+            { "text": "Wait for HR to respond in the channel", "nextNode": "slow_alert", "points": 10 }
+          ]
+        },
+        "intel_dump": {
+          "level": "Level 3 - Network Defender",
+          "text": "Security blocks the domain, mobile alerts go out, and your evidence appears in the next awareness deck.",
+          "outcome": "SUCCESS",
+          "lesson": "Fast verification plus intel sharing shuts down phishing waves.",
+          "relatedArticle": "Advanced Phishing Techniques and Red Flags",
+          "finalScore": 100
+        },
+        "slow_alert": {
+          "level": "Level 3 - Delay Penalty",
+          "text": "HR eventually responds, but dozens already surrendered data.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Crowdsourcing suspicion is fine, but escalation wins the race.",
+          "relatedArticle": "Security Communication Playbooks",
+          "finalScore": 55
+        }
+      }
+    },
+    {
+      "id": "8",
+      "title": "Cloud Kiondo Wide Open",
+      "difficulty": "Hard",
+      "description": "A production bucket stuffed with ID scans is exposed to the entire internet.",
+      "scenario": "While checking overnight metrics, you notice storage bucket \"kiondo-prod\" set to public read. It hosts national ID scans for onboarding. Policy says critical misconfigs must be contained within four hours, but your manager is offline in Eldoret.",
+      "nodes": {
+        "start": {
+          "level": "Level 1 - Alarm",
+          "text": "The bucket's access logs show spikes from unfamiliar IPs.",
+          "choices": [
+            { "text": "Flip it to private immediately and hope that's enough", "nextNode": "solo_patch", "points": 30 },
+            { "text": "Email your manager and wait", "nextNode": "wait_manager", "points": 0 },
+            { "text": "Apply emergency network rules and open an incident bridge", "nextNode": "isolate_bucket", "points": 50 }
+          ]
+        },
+        "solo_patch": {
+          "level": "Level 2 - Silent Fix",
+          "text": "Access stops, but there's no record of what happened.",
+          "choices": [
+            { "text": "Document everything and notify SOC anyway", "nextNode": "bridge_mode", "points": 30 },
+            { "text": "Move on—no need to wake anyone", "nextNode": "walkaway", "points": 0 }
+          ]
+        },
+        "wait_manager": {
+          "level": "Level 2 - Delay",
+          "text": "By the time you get a reply, a threat intel feed lists the bucket in a breach roundup.",
+          "outcome": "FAILURE",
+          "lesson": "Critical exposures need emergency channels, not inbox roulette.",
+          "relatedArticle": "Incident Response and Change Management",
+          "finalScore": 0
+        },
+        "isolate_bucket": {
+          "level": "Level 2 - Coordinated Response",
+          "text": "You block public access via firewall rules and ping SOC with all the details.",
+          "choices": [
+            { "text": "Launch a bridge, invite legal and data protection officers", "nextNode": "bridge_mode", "points": 40 },
+            { "text": "Handle it with just you and SOC to keep it lightweight", "nextNode": "solo_contain", "points": 20 }
+          ]
+        },
+        "bridge_mode": {
+          "level": "Level 3 - Contained",
+          "text": "Legal confirms no exfiltration, regulators are notified, and runbooks get updated.",
+          "outcome": "SUCCESS",
+          "lesson": "Full visibility and documentation beat heroics every time.",
+          "relatedArticle": "Incident Response and Change Management",
+          "finalScore": 100
+        },
+        "solo_contain": {
+          "level": "Level 3 - Blind Spot",
+          "text": "You and SOC fix the issue, but compliance asks why privacy and legal weren't involved.",
+          "outcome": "PARTIAL_SUCCESS",
+          "lesson": "Containment without the right stakeholders invites governance headaches.",
+          "relatedArticle": "Security Governance for Startups",
+          "finalScore": 70
+        },
+        "walkaway": {
+          "level": "Level 3 - Lost Evidence",
+          "text": "Weeks later, auditors can't tell whether data leaked. You're on the hook for the gap.",
+          "outcome": "FAILURE",
+          "lesson": "If it isn't documented, it didn't happen—and that's a problem.",
+          "relatedArticle": "Digital Forensics Basics",
+          "finalScore": 0
+        }
+      }
+    }
+  ]
+}
+
